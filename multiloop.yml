@@ -1,0 +1,20 @@
+#multi loop example
+---
+- name: ansible multi loop example
+  hosts: all
+  become: yes
+  tasks:
+    - name: install multiple packages using loop
+      yum:
+        name: "{{ item.x }}"
+        state: "{{ item.y }}"
+      with_items:
+        - { x: httpd, y: latest }
+        - { x: maven, y: absent }
+        - { x: git,   y: present }
+    - name: start multiple services using loop
+      service:
+        name: "{{ item.x }}"
+        state: "{{ item.y }}"
+      with_items:
+        - { x: httpd, y: started }

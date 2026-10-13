@@ -1,0 +1,31 @@
+#example for notify & handler
+---
+- name: ansible notify & handler example
+  hosts: all
+  become: yes
+  tasks:
+    - name: install httpd
+      yum:
+        name: "httpd"
+        state: "latest"
+      notify:
+        - start httpd service
+    - name: Copy index.html to web server
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        owner: apache
+        group: apache
+        mode: '0644'
+      notify:
+        - restart httpd service
+  handlers:
+    - name: start httpd service
+      service:
+        name: "httpd"
+        state: "started"
+        enabled: yes
+    - name: restart httpd service
+      service:
+        name: "httpd"
+        state: "restarted"

@@ -1,0 +1,40 @@
+#ansible example for tag
+---
+- name: ansible tag example
+  hosts: all
+  become: yes
+  vars:
+    - package: httpd
+    - state: latest 
+    - b: started
+    - c: restarted
+  tasks:
+    - name: install httpd
+      yum:
+        name: "{{ package }}"
+        state: "{{ state }}"
+      tags:
+        - install
+    - name: start httpd
+      service:
+        name: "{{ package }}"
+        state: "{{ b }}"
+        enabled: yes
+      tags:
+        - start
+    - name: Copy index.html to web server
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        owner: apache
+        group: apache
+        mode: '0644'
+      tags:
+        - copy
+    - name: restart httpd
+      service:
+        name: "{{ package }}"
+        state: "{{ c }}"
+      tags:
+        - restart
+

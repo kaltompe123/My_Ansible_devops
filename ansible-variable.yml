@@ -1,0 +1,36 @@
+#example for ansible variable
+---
+- name: ansible variable example
+  hosts: all
+  become: yes
+  vars:
+    - package: httpd
+    - state: latest 
+    - b: started
+    - c: restarted
+#installing httpd using variable
+  tasks:
+    - name: install httpd
+      yum:
+        name: "{{ package }}"
+        state: "{{ state }}"
+#start httpd using variable
+    - name: start httpd
+      service:
+        name: "{{ package }}"
+        state: "{{ b }}"
+        enabled: yes
+ #copy index.html to web server using variable
+    - name: Copy index.html to web server
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        owner: apache
+        group: apache
+        mode: '0644'
+ #restart httpd using variable
+    - name: restart httpd
+      service:
+        name: "{{ package }}"
+        state: "{{ c }}"
+

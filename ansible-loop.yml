@@ -1,0 +1,54 @@
+---
+- name: ansible loop example
+  hosts: all
+  become: yes
+  tasks:
+    - name: install multiple packages using loop
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - httpd
+        - git
+        - maven
+        - tree 
+
+#######################################################
+# ---
+# - name: ansible loop example
+#   hosts: all
+#   become: yes
+#   tasks:
+#     - name: install multiple packages using loop
+#       yum:
+#         name: "{{ item }}"
+#         state: present
+#       loop:
+#         - httpd
+#         - git
+#         - maven
+#         - tree 
+
+
+
+
+
+################################################################################
+
+# #ansible loop example to install multiple packages
+# ---
+# - name: ansible loop example
+#   hosts: all
+#   become: yes
+#   vars:
+#     - package_list:
+#         - httpd
+#         - git
+#         - maven
+#         - tree 
+#   tasks:
+#     - name: install multiple packages
+#       yum:
+#         name: "{{ item }}"
+#         state: latest
+#       loop: "{{ package_list }}"
