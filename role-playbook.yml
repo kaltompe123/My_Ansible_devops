@@ -1,0 +1,9 @@
+#role playbook
+---
+- name: role playbook
+  hosts: all
+  become: yes
+  roles:
+    - role: role-1
+
+###ansible-galaxy init role-1

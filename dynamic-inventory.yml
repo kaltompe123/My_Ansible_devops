@@ -1,0 +1,48 @@
+# Dynamic inventory is a feature in Ansible that allows you to automatically generate an inventory of hosts based on external sources, such as cloud providers, databases, or other dynamic systems. This is particularly useful in environments where the infrastructure is constantly changing, such as in cloud environments.
+#cat  /etc/ansible/aws_ec2.yml 
+
+plugin: amazon.aws.aws_ec2
+regions:
+  - us-east-1
+filters:
+  tag:Name: 
+    - dev
+    - node  
+    #add multiple tag names here if required
+
+
+#########################################################################
+#for grouping hosts based on their tags, you can use the keyed_groups option in the dynamic inventory configuration. This allows you to create groups based on specific tag values, making it easier to organize and manage your hosts.
+#cat  /etc/ansible/aws_ec2.yml 
+---
+plugin: amazon.aws.aws_ec2
+regions:
+  - us-east-1
+    #filters:
+  #  tag:Name:
+    #    - dev
+      #add multiple tag names here if required
+
+keyed_groups:
+  # add hosts to tag_Name_value groups for each aws_ec2 host's tags.Name variable.
+  - key: tags.Name
+    prefix: tag_Name_
+    separator: ""
+groups:
+  # add hosts to the group dev if any of the dictionary's keys or values is the word 'dev'.
+  development: "dev” in (tags|list)"
+filters:
+  tag:Name:
+    - 'node'
+    - 'dev'
+
+
+# [root@ip-172-31-34-197 ~]# cat /etc/ansible/ansible.cfg 
+# [defaults]
+# host_key_checking = False
+# remote_user = ec2-user
+# private_key_file = /root/13thoct.pem
+# enable_plugins = aws_ec2
+# inventory =./aws_ec2.yml
+# [root@ip-172-31-34-197 ~]# 
+
